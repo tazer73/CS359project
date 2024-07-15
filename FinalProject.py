@@ -22,3 +22,4 @@ def extract():
 data = extract()
 print('data shape:', data.shape)
 print(data)
+
