@@ -1,6 +1,5 @@
 ## Import packages
 import pandas as pd
-import glob
 
 # Load the CSV files
 csv0 = pd.read_csv("ids_0.csv")
