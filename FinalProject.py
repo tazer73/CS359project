@@ -24,3 +24,7 @@ combined = pd.concat([combined , parquet5 , parquet6 , parquet8 , parquet11], ig
 
 # Display the combined DataFrame
 print(combined)
+
+combined = combined.drop_duplicates
+
+print(combined)
