@@ -27,12 +27,9 @@ def extract():
     return combined
 
 data = extract()
-#print(data)
 
 #Transform section
 data = data.dropna()
-
-#print(data)
 
 #Load section
 def loadcsv(data: pd.DataFrame) -> None:
@@ -47,20 +44,17 @@ loadcsv(data)
 
 #Reading data section (Load to dataframe)
 data = pd.read_csv('dataSet.csv')
-#print(data.columns)
 
 #Exploratory analysis
-#Delete last column 'Heartbleed'
+#Cleanup Cilumn names
 
 data.columns = data.columns.str.strip()
 data.columns = data.columns.str.replace(" " , "_")
 data.columns = data.columns.str.replace(".1" , "")
 
-print(data.columns)
+# Remove the Heartbleed rows
+data = data[data.Label != 'Heartbleed']
 
-print(data.shape)
-data = data[data.Label!='Heartbleed']
-print(data.shape)
-
-
-attack = data['Label'].copy()
+#Create attack DF (y axis)
+attack = data[['Label']]
+print(attack.shape)
