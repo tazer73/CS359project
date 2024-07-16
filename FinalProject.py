@@ -57,3 +57,10 @@ data.columns = data.columns.str.replace(" " , "_")
 data.columns = data.columns.str.replace(".1" , "")
 
 print(data.columns)
+
+print(data.shape)
+data = data[data.Label!='Heartbleed']
+print(data.shape)
+
+
+attack = data['Label'].copy()
