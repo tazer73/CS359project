@@ -45,4 +45,8 @@ def loadcsv(data: pd.DataFrame) -> None:
 
 loadcsv(data)
 
-#Reading data section
+#Reading data section (Load to dataframe)
+data = pd.read_csv('dataSet.csv')
+print(data.columns)
+
+#Exploratory analysis
