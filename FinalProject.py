@@ -27,12 +27,12 @@ def extract():
     return combined
 
 data = extract()
-print(data)
+#print(data)
 
 #Transform section
 data = data.dropna()
 
-print(data)
+#print(data)
 
 #Load section
 def loadcsv(data: pd.DataFrame) -> None:
@@ -47,11 +47,11 @@ loadcsv(data)
 
 #Reading data section (Load to dataframe)
 data = pd.read_csv('dataSet.csv')
-print(data.columns)
+#print(data.columns)
 
 #Exploratory analysis
 #Delete last column 'Heartbleed'
 
-data.rename(columns=lambda x:x.strip(), inplace=True)
+data.columns = data.columns.str.strip()
 
 print(data.columns)
