@@ -50,3 +50,8 @@ data = pd.read_csv('dataSet.csv')
 print(data.columns)
 
 #Exploratory analysis
+#Delete last column 'Heartbleed'
+
+data.rename(columns=lambda x:x.strip(), inplace=True)
+
+print(data.columns)
