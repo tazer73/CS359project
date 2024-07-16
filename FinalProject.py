@@ -53,5 +53,7 @@ data = pd.read_csv('dataSet.csv')
 #Delete last column 'Heartbleed'
 
 data.columns = data.columns.str.strip()
+data.columns = data.columns.str.replace(" " , "_")
+data.columns = data.columns.str.replace(".1" , "")
 
 print(data.columns)
