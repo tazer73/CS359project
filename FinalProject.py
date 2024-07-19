@@ -45,16 +45,28 @@ loadcsv(data)
 #Reading data section (Load to dataframe)
 data = pd.read_csv('dataSet.csv')
 
-#Exploratory analysis
-#Cleanup Cilumn names
 
+#7. EXPLORATORY ANALYSIS
+
+#Identify shape of the dataset.
+print("Original dataset shape: " + str(data.shape))
+#Cleanup Column names
 data.columns = data.columns.str.strip()
 data.columns = data.columns.str.replace(" " , "_")
 data.columns = data.columns.str.replace(".1" , "")
 
+#Identify if dataset has missing data. There is no missing data.
+print("No. of missing data in dataset: " + str(data.isna().sum().sum()))
+
 # Remove the Heartbleed rows
 data = data[data.Label != 'Heartbleed']
-
+print("Dataset shape without 'Heartbleed' elements: " + str(data.shape))
 #Create attack DF (y axis)
 attack = data[['Label']]
-print(attack.shape)
+print("New 'attack' dataset shape: " + str(attack.shape))
+#Delete 'Label' from original dataset
+data.drop('Label',axis=1, inplace=True)
+print("Base dataset without 'Label' column: " + str(data.shape))
+
+
+#Performing univariate analysis.
