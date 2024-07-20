@@ -70,3 +70,4 @@ print("Base dataset without 'Label' column: " + str(data.shape))
 
 
 #Performing univariate analysis.
+print(data.describe())
