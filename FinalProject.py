@@ -9,6 +9,7 @@ from sklearn.feature_selection import SequentialFeatureSelector, RFE
 from sklearn.feature_selection import r_regression, f_regression, mutual_info_regression
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import r2_score, mean_squared_error
+from sklearn.feature_selection import SelectKBest, SelectPercentile
 
 #Extract section
 def extract():
@@ -54,6 +55,10 @@ loadcsv(data)
 #Reading data section (Load to dataframe)
 data = pd.read_csv('dataSet.csv')
 
+print("WITHOUD DROIPPING: " + str(data.shape))
+data = data.drop_duplicates()
+print(" DROIPPING: " + str(data.shape))
+
 
 #7. EXPLORATORY ANALYSIS
 
@@ -88,13 +93,16 @@ data = data.loc[:, data.var(axis=0) >= 0.05]
 #data.hist()
 #(pd.DataFrame(X.AT).corrwith(X.V))
 
-#split the data
-attack = pd.get_dummies(attack)
-attack.head(20)
+#Encoding data
+attack['Label'] = attack['Label'].replace('BENIGN', 1, regex=True)
+attack['Label'] = attack['Label'].replace('DoS Hulk', 2, regex=True)
+attack['Label'] = attack['Label'].replace('DoS GoldenEye', 3, regex=True)
+attack['Label'] = attack['Label'].replace('DoS Slowhttptest', 4, regex=True)
 
 features = data.to_numpy()
 label = attack.to_numpy()
 
+#split the data
 X_train, X_test, y_train, y_test = train_test_split(features, label, test_size=0.25, random_state=6969)
 
 #standardize the data
@@ -102,18 +110,33 @@ scaler = StandardScaler()
 X_train_standard = scaler.fit_transform(X_train)
 X_test_standard = scaler.fit_transform(X_test)
 
-#lr = LinearRegression()
+lr = LinearRegression()
 
 #Without Feature Selection
-# create a regressor
-rf_regressor = RandomForestRegressor(n_estimators=100)
-
+rf_regressor = RandomForestRegressor(n_estimators=5)
 # train the model
-rf_regressor.fit(X_train_standard, y_train)
-
+rf_regressor.fit(X_train_standard, y_train.ravel())
 # make predictions
 pred = rf_regressor.predict(X_test_standard)
+# compute r2-score and mse
+r2 = r2_score(y_test, pred)
+print("r2 score: {:.3f}".format(r2))
+# compute mse
+mse = mean_squared_error(y_test, pred)
+print("mse: {:.3f}".format(mse))
 
+# Keep the best  30% of the features
+r_selection = SelectPercentile(r_regression, percentile=30)
+# model fitting and feature selection
+X_train_selected = r_selection.fit_transform(X_train_standard, y_train)
+X_test_selected = r_selection.transform(X_test_standard)
+print('X_train_selected shape:', X_train_selected.shape)
+print('X_test_selected shape:', X_test_selected.shape)
+# fit the regressor using the selected features
+rf_regressor.fit(X_train_selected, y_train)
+
+# make predictions
+pred = rf_regressor.predict(X_test_selected)
 # compute r2-score and mse
 r2 = r2_score(y_test, pred)
 print("r2 score: {:.3f}".format(r2))
