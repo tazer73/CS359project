@@ -76,10 +76,10 @@ print("Base dataset without 'Label' column: " + str(data.shape))
 
 #Performing univariate analysis.
 #Drop features with variane less than .05
-print(data.describe())
+#print(data.describe())
 data = data.loc[:, data.var(axis=0) >= 0.05]
-print(data.head)
-print(attack.head)
+#print(data.head)
+#print(attack.head)
 
 #data.hist()
 #(pd.DataFrame(X.AT).corrwith(X.V))
