@@ -3,6 +3,8 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler , PolynomialFeatures
+from sklearn.linear_model import LinearRegression, Ridge
 
 #Extract section
 def extract():
@@ -80,6 +82,7 @@ print(data.head)
 print(attack.head)
 
 #data.hist()
+#(pd.DataFrame(X.AT).corrwith(X.V))
 
 #split the data
 
@@ -88,3 +91,11 @@ print(X_train.shape)
 print(X_test.shape)
 print(y_train.shape)
 print(y_test.shape)
+
+#standardize the data
+
+scaler = StandardScaler()
+features_standard = scaler.fit_transform(X_train)
+features_standard = scaler.fit_transform(X_test)
+
+lr = LinearRegression()
