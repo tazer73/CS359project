@@ -5,6 +5,10 @@ import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler , PolynomialFeatures
 from sklearn.linear_model import LinearRegression, Ridge
+from sklearn.feature_selection import SequentialFeatureSelector, RFE
+from sklearn.feature_selection import r_regression, f_regression, mutual_info_regression
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.metrics import r2_score, mean_squared_error
 
 #Extract section
 def extract():
@@ -85,17 +89,35 @@ data = data.loc[:, data.var(axis=0) >= 0.05]
 #(pd.DataFrame(X.AT).corrwith(X.V))
 
 #split the data
+attack = pd.get_dummies(attack)
+attack.head(20)
 
-X_train, X_test, y_train, y_test = train_test_split(data, attack, test_size=0.25, random_state=6969)
-print(X_train.shape)
-print(X_test.shape)
-print(y_train.shape)
-print(y_test.shape)
+features = data.to_numpy()
+label = attack.to_numpy()
+
+X_train, X_test, y_train, y_test = train_test_split(features, label, test_size=0.25, random_state=6969)
 
 #standardize the data
-
 scaler = StandardScaler()
-features_standard = scaler.fit_transform(X_train)
-features_standard = scaler.fit_transform(X_test)
+X_train_standard = scaler.fit_transform(X_train)
+X_test_standard = scaler.fit_transform(X_test)
 
 lr = LinearRegression()
+
+#Without Feature Selection
+# create a regressor
+rf_regressor = RandomForestRegressor(n_estimators=100)
+
+# train the model
+rf_regressor.fit(X_train_standard, y_train)
+
+# make predictions
+pred = rf_regressor.predict(X_test_standard)
+
+# compute r2-score and mse
+r2 = r2_score(y_test, pred)
+print("r2 score: {:.3f}".format(r2))
+
+# compute mse
+mse = mean_squared_error(y_test, pred)
+print("mse: {:.3f}".format(mse))
