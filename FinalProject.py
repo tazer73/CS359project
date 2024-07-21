@@ -2,6 +2,7 @@
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
 
 #Extract section
 def extract():
@@ -78,4 +79,12 @@ df2 = data.loc[:, data.var(axis=0) <= 0.05]
 print(data.head)
 print(attack.head)
 
-data.hist()
+#data.hist()
+
+#split the data
+
+X_train, X_test, y_train, y_test = train_test_split(data, attack, test_size=0.25, random_state=6969)
+print(X_train.shape)
+print(X_test.shape)
+print(y_train.shape)
+print(y_test.shape)
