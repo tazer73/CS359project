@@ -131,8 +131,6 @@ r_selection = SelectPercentile(r_regression, percentile=30)
 # model fitting and feature selection
 X_train_selected = r_selection.fit_transform(X_train_standard, y_train.ravel())
 X_test_selected = r_selection.transform(X_test_standard)
-print('X_train_selected shape:', X_train_selected.shape)
-print('X_test_selected shape:', X_test_selected.shape)
 # fit the regressor using the selected features
 rf_regressor.fit(X_train_selected, y_train.ravel())
 print('X_train_selected shape:', X_train_selected.shape)
