@@ -186,7 +186,6 @@ pred = xgb_regressor.predict(X_test_selected)
 # compute r2-score and mse
 r2 = r2_score(y_test, pred)
 print("r2 score XGB: {:.3f}".format(r2))
-
 # compute mse
 mse = mean_squared_error(y_test, pred)
 print("mse: {:.3f}".format(mse))
