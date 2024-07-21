@@ -102,7 +102,7 @@ scaler = StandardScaler()
 X_train_standard = scaler.fit_transform(X_train)
 X_test_standard = scaler.fit_transform(X_test)
 
-lr = LinearRegression()
+#lr = LinearRegression()
 
 #Without Feature Selection
 # create a regressor
