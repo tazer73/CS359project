@@ -10,7 +10,7 @@ from sklearn.feature_selection import r_regression, f_regression, mutual_info_re
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import r2_score, mean_squared_error
 from sklearn.feature_selection import SelectKBest, SelectPercentile
-from xgboost import XGBRegressor
+from xgboost import XGBRegressor # type: ignore
 
 #Extract section
 def extract():
