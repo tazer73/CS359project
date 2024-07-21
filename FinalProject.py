@@ -70,4 +70,10 @@ print("Base dataset without 'Label' column: " + str(data.shape))
 
 
 #Performing univariate analysis.
+#Drop features with variane less than .05
 print(data.describe())
+df2 = data.loc[:, data.var(axis=0) <= 0.05]
+print(data.head)
+print(attack.head)
+
+data.hist()
