@@ -59,7 +59,7 @@ data = pd.read_csv('dataSet.csv')
 data = data.drop_duplicates()
 
 #Identify shape of the dataset.
-print("Original dataset shape: " + str(data.shape))
+print("Dataset shape: " + str(data.shape))
 #Cleanup Column names
 data.columns = data.columns.str.strip()
 data.columns = data.columns.str.replace(" " , "_")
@@ -78,8 +78,8 @@ attack = data[['Label']]
 data.drop('Label',axis=1, inplace=True)
 
 #Performing univariate analysis.
-#Drop features with variane less than .05
-#data = data.loc[:, data.var(axis=0) >= 0.05]
+#Drop features with variance less than .05 (removing 0 variance)
+data = data.loc[:, data.var(axis=0) >= 0.05]
 
 #Encoding data
 attack['Label'] = attack['Label'].replace('BENIGN', 0, regex=True)
@@ -92,8 +92,13 @@ features = data.to_numpy()
 label = attack.to_numpy()
 X_train, X_test, y_train, y_test = train_test_split(features, label, test_size=0.25, random_state=6969)
 
-print(y_train.shape)
-print(y_test.shape)
-
 y_train = y_train.flatten()
 y_test = y_test.flatten()
+
+#standardize the data
+scaler = StandardScaler()
+X_train_standard = scaler.fit_transform(X_train)
+X_test_standard = scaler.fit(X_test)
+
+#Describe the data to ensure correct standardization
+print(pd.DataFrame(X_train_standard).describe())
