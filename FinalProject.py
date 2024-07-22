@@ -95,10 +95,10 @@ data = data.loc[:, data.var(axis=0) >= 0.05]
 #(pd.DataFrame(X.AT).corrwith(X.V))
 
 #Encoding data
-attack['Label'] = attack['Label'].replace('BENIGN', 1, regex=True)
-attack['Label'] = attack['Label'].replace('DoS Hulk', 2, regex=True)
-attack['Label'] = attack['Label'].replace('DoS GoldenEye', 3, regex=True)
-attack['Label'] = attack['Label'].replace('DoS Slowhttptest', 4, regex=True)
+attack['Label'] = attack['Label'].replace('BENIGN', 0, regex=True)
+attack['Label'] = attack['Label'].replace('DoS Hulk', 1, regex=True)
+attack['Label'] = attack['Label'].replace('DoS GoldenEye', 1, regex=True)
+attack['Label'] = attack['Label'].replace('DoS Slowhttptest', 1, regex=True)
 
 features = data.to_numpy()
 label = attack.to_numpy()
@@ -109,7 +109,7 @@ X_train, X_test, y_train, y_test = train_test_split(features, label, test_size=0
 #standardize the data
 scaler = StandardScaler()
 X_train_standard = scaler.fit_transform(X_train)
-X_test_standard = scaler.fit_transform(X_test)
+X_test_standard = scaler.transform(X_test)
 
 lr = LinearRegression()
 
