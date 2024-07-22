@@ -1,14 +1,15 @@
 ## Import packages
+import numpy as np
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler , PolynomialFeatures
-from sklearn.linear_model import LinearRegression, Ridge
+from sklearn.linear_model import LinearRegression, Perceptron, Ridge
 from sklearn.feature_selection import SelectFromModel, SequentialFeatureSelector, RFE
 from sklearn.feature_selection import r_regression, f_regression, mutual_info_regression
-from sklearn.ensemble import RandomForestRegressor
-from sklearn.metrics import f1_score, precision_score, recall_score, accuracy_score
+from sklearn.ensemble import AdaBoostClassifier, RandomForestRegressor
+from sklearn.metrics import ConfusionMatrixDisplay, f1_score, precision_score, recall_score, accuracy_score
 from sklearn.feature_selection import SelectKBest, SelectPercentile
 from xgboost import XGBRegressor , XGBClassifier
 
@@ -103,28 +104,65 @@ X_test_standard = scaler.fit(X_test)
 #Describe the data to ensure correct standardization
 #print(pd.DataFrame(X_train_standard).describe())
 
+#Feature selection
 xgbC = XGBClassifier()
 xgbC.fit(X_train_standard,y_train)
-
 selection = SelectFromModel(xgbC,threshold=.01, prefit=True)
 X_train_selected = selection.transform(X_train)
 X_test_selected = selection.transform(X_test)
-#print(X_train_selected.shape)
-#print(X_test_selected.shape)
+#End of feature selection
 
-#Training (fitting) the data to the classifiyer
+#XGBC MODEL
 xgbC.fit(X_train_selected , y_train)
 #Predict the train and 
 X_train_selected_pred = xgbC.predict(X_train_selected)
 X_test_selected_pred = xgbC.predict(X_test_selected)
 
-#tally the results
 acc_perc = accuracy_score(y_test, X_test_selected_pred)
 f1score_perc = f1_score(y_test, X_test_selected_pred)
 precision_perc = precision_score(y_test, X_test_selected_pred)
 recall_perc = recall_score(y_test, X_test_selected_pred)
 
 print('XGBC Model')
+print('-'*20)
+print('Accuracy: {:.3f}'.format(acc_perc))
+print('Precision: {:.3f}'.format(precision_perc))
+print('Recall: {:.3f}'.format(recall_perc))
+print('F1-score: {:.3f}'.format(f1score_perc))
+
+#XGB, Perceptron, AdaBoost, Logistic Regression, Majority Voting
+
+
+#PERCEPTRON MODEL
+perceptron = Perceptron(eta0=0.001, random_state=1)
+perceptron.fit(X_train_selected,y_train)
+X_train_selected_pred = perceptron.predict(X_train_selected)
+X_test_selected_pred = perceptron.predict(X_test_selected)
+acc_perc = accuracy_score(y_test, X_test_selected_pred)
+f1score_perc = f1_score(y_test, X_test_selected_pred)
+precision_perc = precision_score(y_test, X_test_selected_pred)
+recall_perc = recall_score(y_test, X_test_selected_pred)
+
+print('Perceptron Model')
+print('-'*20)
+print('Accuracy: {:.3f}'.format(acc_perc))
+print('Precision: {:.3f}'.format(precision_perc))
+print('Recall: {:.3f}'.format(recall_perc))
+print('F1-score: {:.3f}'.format(f1score_perc))
+
+
+#ADABOOST MODEL
+adaboost_perc = AdaBoostClassifier(estimator=Perceptron(eta0=0.001, random_state=1), n_estimators=100, 
+                              learning_rate=0.001, random_state=1, algorithm='SAMME').fit(X_train_selected, y_train)
+adaboost_perc.fit(X_train_selected,y_train)
+X_train_selected_pred = adaboost_perc.predict(X_train_selected)
+X_test_selected_pred = adaboost_perc.predict(X_test_selected)
+acc_perc = accuracy_score(y_test, X_test_selected_pred)
+f1score_perc = f1_score(y_test, X_test_selected_pred)
+precision_perc = precision_score(y_test, X_test_selected_pred)
+recall_perc = recall_score(y_test, X_test_selected_pred)
+
+print('AdaBoost Model')
 print('-'*20)
 print('Accuracy: {:.3f}'.format(acc_perc))
 print('Precision: {:.3f}'.format(precision_perc))
