@@ -66,6 +66,8 @@ data.columns = data.columns.str.strip()
 data.columns = data.columns.str.replace(" " , "_")
 data.columns = data.columns.str.replace(".1" , "")
 
+data = data.loc[:,~data.columns.duplicated()].copy()
+
 #Identify if dataset has missing data. There is no missing data.
 print("No. of missing data in dataset: " + str(data.isna().sum().sum()))
 
