@@ -58,6 +58,13 @@ data = pd.read_csv('dataSet.csv')
 #Drop duplicate values
 data = data.drop_duplicates()
 
+#Identify shape of the dataset.
+print("Original dataset shape: " + str(data.shape))
+#Cleanup Column names
+data.columns = data.columns.str.strip()
+data.columns = data.columns.str.replace(" " , "_")
+data.columns = data.columns.str.replace(".1" , "")
+
 #Identify if dataset has missing data. There is no missing data.
 print("No. of missing data in dataset: " + str(data.isna().sum().sum()))
 
