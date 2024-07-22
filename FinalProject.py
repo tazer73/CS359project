@@ -10,7 +10,7 @@ from sklearn.feature_selection import r_regression, f_regression, mutual_info_re
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import r2_score, mean_squared_error
 from sklearn.feature_selection import SelectKBest, SelectPercentile
-from xgboost import XGBRegressor # type: ignore
+from xgboost import XGBRegressor , XGBClassifier
 
 #Extract section
 def extract():
@@ -60,7 +60,6 @@ print("WITHOUD DROIPPING: " + str(data.shape))
 data = data.drop_duplicates()
 print(" DROIPPING: " + str(data.shape))
 
-
 #7. EXPLORATORY ANALYSIS
 
 #Identify shape of the dataset.
@@ -82,7 +81,6 @@ print("New 'attack' dataset shape: " + str(attack.shape))
 #Delete 'Label' from original dataset
 data.drop('Label',axis=1, inplace=True)
 print("Base dataset without 'Label' column: " + str(data.shape))
-
 
 #Performing univariate analysis.
 #Drop features with variane less than .05
@@ -109,12 +107,12 @@ X_train, X_test, y_train, y_test = train_test_split(features, label, test_size=0
 #standardize the data
 scaler = StandardScaler()
 X_train_standard = scaler.fit_transform(X_train)
-X_test_standard = scaler.transform(X_test)
+X_test_standard = scaler.fit(X_test)
 
 lr = LinearRegression()
 
 #WITHOUT FEATURE SELECTION
-rf_regressor = RandomForestRegressor(n_estimators=70)
+rf_regressor = XGBClassifier(n_estimators=70)
 # train the model
 rf_regressor.fit(X_train_standard, y_train.ravel())
 # make predictions
@@ -143,7 +141,6 @@ print("r2 score PERCENTILE: {:.3f}".format(r2))
 # compute mse
 mse = mean_squared_error(y_test, pred)
 print("mse: {:.3f}".format(mse))
-
 
 # SELECT K-BEST
 r_selection = SelectKBest(r_regression, k=20)
