@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler , PolynomialFeatures
 from sklearn.linear_model import LinearRegression, Ridge
-from sklearn.feature_selection import SequentialFeatureSelector, RFE
+from sklearn.feature_selection import SelectFromModel, SequentialFeatureSelector, RFE
 from sklearn.feature_selection import r_regression, f_regression, mutual_info_regression
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import r2_score, mean_squared_error
@@ -102,3 +102,13 @@ X_test_standard = scaler.fit(X_test)
 
 #Describe the data to ensure correct standardization
 print(pd.DataFrame(X_train_standard).describe())
+
+xgbC = XGBClassifier()
+xgbC.fit(X_train_standard,y_train)
+
+selection = SelectFromModel(xgbC,threshold=.01, prefit=True)
+X_train_selected = selection.transform(X_train)
+X_test_selected = selection.transform(X_test)
+print(X_train_selected.shape)
+print(X_test_selected.shape)
+
