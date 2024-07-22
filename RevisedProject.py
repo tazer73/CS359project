@@ -101,7 +101,7 @@ X_train_standard = scaler.fit_transform(X_train)
 X_test_standard = scaler.fit(X_test)
 
 #Describe the data to ensure correct standardization
-print(pd.DataFrame(X_train_standard).describe())
+#print(pd.DataFrame(X_train_standard).describe())
 
 xgbC = XGBClassifier()
 xgbC.fit(X_train_standard,y_train)
@@ -109,6 +109,20 @@ xgbC.fit(X_train_standard,y_train)
 selection = SelectFromModel(xgbC,threshold=.01, prefit=True)
 X_train_selected = selection.transform(X_train)
 X_test_selected = selection.transform(X_test)
-print(X_train_selected.shape)
-print(X_test_selected.shape)
+#print(X_train_selected.shape)
+#print(X_test_selected.shape)
+
+#Training (fitting) the data to the classifiyer
+xgbC.fit(X_train_selected , y_train)
+#Predict the train and 
+X_train_selected_pred = xgbC.predict(X_train_selected)
+X_test_selected_pred = xgbC.predict(X_test_selected)
+
+plt.plot(X_train_selected_pred[:100], label='X_train_selected_pred' , linestyle='None', marker='o', c='blue')
+plt.plot(y_train[:100],label='y_train' , linestyle='None', marker='+', c='red', markersize=10)
+plt.xlabel("X_train_selected_pred")
+plt.ylabel("y_train")
+plt.legend()
+plt.savefig(fname='lr1.png', format='png', dpi=600)
+plt.show()
 
