@@ -2,14 +2,13 @@
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
-from sklearn.base import accuracy_score
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler , PolynomialFeatures
 from sklearn.linear_model import LinearRegression, Ridge
 from sklearn.feature_selection import SelectFromModel, SequentialFeatureSelector, RFE
 from sklearn.feature_selection import r_regression, f_regression, mutual_info_regression
 from sklearn.ensemble import RandomForestRegressor
-from sklearn.metrics import f1_score, precision_score, r2_score, mean_squared_error, recall_score
+from sklearn.metrics import f1_score, precision_score, recall_score, accuracy_score
 from sklearn.feature_selection import SelectKBest, SelectPercentile
 from xgboost import XGBRegressor , XGBClassifier
 
@@ -119,14 +118,6 @@ xgbC.fit(X_train_selected , y_train)
 X_train_selected_pred = xgbC.predict(X_train_selected)
 X_test_selected_pred = xgbC.predict(X_test_selected)
 
-plt.plot(X_train_selected_pred[:100], label='X_train_selected_pred' , linestyle='None', marker='o', c='blue')
-plt.plot(y_train[:100],label='y_train' , linestyle='None', marker='+', c='red', markersize=10)
-plt.xlabel("X_train_selected_pred")
-plt.ylabel("y_train")
-plt.legend()
-plt.savefig(fname='LinearTrain.png', format='png', dpi=600)
-plt.show()
-
 plt.plot(X_test_selected_pred[:100], label='X_test_selected_pred' , linestyle='None', marker='o', c='blue')
 plt.plot(y_test[:100],label='y_test' , linestyle='None', marker='+', c='red', markersize=10)
 plt.xlabel("X_test_selected_pred")
@@ -135,7 +126,14 @@ plt.legend()
 plt.savefig(fname='LinearTest.png', format='png', dpi=600)
 plt.show()
 
-acc_adaboost_perc = accuracy_score(y_test, X_test_selected_pred)
-f1score_adaboost_perc = f1_score(y_test, X_test_selected_pred)
-precision_adaboost_perc = precision_score(y_test, X_test_selected_pred)
-recall_adaboost_perc = recall_score(y_test, X_test_selected_pred)
+acc_perc = accuracy_score(y_test, X_test_selected_pred)
+f1score_perc = f1_score(y_test, X_test_selected_pred)
+precision_perc = precision_score(y_test, X_test_selected_pred)
+recall_perc = recall_score(y_test, X_test_selected_pred)
+
+print('Perceptron Model')
+print('-'*20)
+print('Accuracy: {:.3f}'.format(acc_perc))
+print('Precision: {:.3f}'.format(precision_perc))
+print('Recall: {:.3f}'.format(recall_perc))
+print('F1-score: {:.3f}'.format(f1score_perc))
