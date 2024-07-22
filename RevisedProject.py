@@ -112,9 +112,10 @@ X_train_selected = selection.transform(X_train)
 X_test_selected = selection.transform(X_test)
 #End of feature selection
 
+#XGB, Perceptron, AdaBoost, Logistic Regression, Majority Voting
+
 #XGBC MODEL
 xgbC.fit(X_train_selected , y_train)
-#Predict the train and 
 X_train_selected_pred = xgbC.predict(X_train_selected)
 X_test_selected_pred = xgbC.predict(X_test_selected)
 
@@ -123,29 +124,25 @@ f1score_perc = f1_score(y_test, X_test_selected_pred)
 precision_perc = precision_score(y_test, X_test_selected_pred)
 recall_perc = recall_score(y_test, X_test_selected_pred)
 
-print()
-print('XGBC Model')
+print('\n Test XGBC Model')
 print('-'*20)
 print('Accuracy: {:.3f}'.format(acc_perc))
 print('Precision: {:.3f}'.format(precision_perc))
 print('Recall: {:.3f}'.format(recall_perc))
 print('F1-score: {:.3f}'.format(f1score_perc))
 
-#XGB, Perceptron, AdaBoost, Logistic Regression, Majority Voting
-
-
 #PERCEPTRON MODEL
 perceptron = Perceptron(eta0=0.001, random_state=1)
 perceptron.fit(X_train_selected,y_train)
 X_train_selected_pred = perceptron.predict(X_train_selected)
 X_test_selected_pred = perceptron.predict(X_test_selected)
+
 acc_perc = accuracy_score(y_test, X_test_selected_pred)
 f1score_perc = f1_score(y_test, X_test_selected_pred)
 precision_perc = precision_score(y_test, X_test_selected_pred)
 recall_perc = recall_score(y_test, X_test_selected_pred)
 
-print()
-print('Perceptron Model')
+print('\nPerceptron Model')
 print('-'*20)
 print('Accuracy: {:.3f}'.format(acc_perc))
 print('Precision: {:.3f}'.format(precision_perc))
@@ -154,18 +151,17 @@ print('F1-score: {:.3f}'.format(f1score_perc))
 
 
 #ADABOOST MODEL
-adaboost_perc = AdaBoostClassifier(estimator=Perceptron(eta0=0.001, random_state=1), n_estimators=100, 
-                              learning_rate=0.001, random_state=1, algorithm='SAMME').fit(X_train_selected, y_train)
+adaboost_perc = AdaBoostClassifier(estimator=Perceptron(eta0=0.001, random_state=1), n_estimators=100, learning_rate=0.001, random_state=1, algorithm='SAMME').fit(X_train_selected, y_train)
 adaboost_perc.fit(X_train_selected,y_train)
 X_train_selected_pred = adaboost_perc.predict(X_train_selected)
 X_test_selected_pred = adaboost_perc.predict(X_test_selected)
+
 acc_perc = accuracy_score(y_test, X_test_selected_pred)
 f1score_perc = f1_score(y_test, X_test_selected_pred)
 precision_perc = precision_score(y_test, X_test_selected_pred)
 recall_perc = recall_score(y_test, X_test_selected_pred)
 
-print()
-print('AdaBoost Model')
+print('\nAdaBoost Model')
 print('-'*20)
 print('Accuracy: {:.3f}'.format(acc_perc))
 print('Precision: {:.3f}'.format(precision_perc))
@@ -178,13 +174,13 @@ lr = LogisticRegression().fit(X_train_selected, y_train)
 lr.fit(X_train_selected,y_train)
 X_train_selected_pred = lr.predict(X_train_selected)
 X_test_selected_pred = lr.predict(X_test_selected)
+
 acc_perc = accuracy_score(y_test, X_test_selected_pred)
 f1score_perc = f1_score(y_test, X_test_selected_pred)
 precision_perc = precision_score(y_test, X_test_selected_pred)
 recall_perc = recall_score(y_test, X_test_selected_pred)
 
-print()
-print('Logistic Regression Model')
+print('\nLogistic Regression Model')
 print('-'*20)
 print('Accuracy: {:.3f}'.format(acc_perc))
 print('Precision: {:.3f}'.format(precision_perc))
@@ -192,20 +188,17 @@ print('Recall: {:.3f}'.format(recall_perc))
 print('F1-score: {:.3f}'.format(f1score_perc))
 
 #MAJORITYVOTING MODEL
-hard_majorityvote = VotingClassifier(estimators=[('perceptron', perceptron),
-                                                 ('adaboost_perc', adaboost_perc),
-                                                 ('logistic regression', lr)],
-                                     voting='hard')
+hard_majorityvote = VotingClassifier(estimators=[('perceptron', perceptron),('adaboost_perc', adaboost_perc),('logistic regression', lr)],voting='hard')
 hard_majorityvote.fit(X_train_selected,y_train)
 X_train_selected_pred = hard_majorityvote.predict(X_train_selected)
 X_test_selected_pred = hard_majorityvote.predict(X_test_selected)
+
 acc_perc = accuracy_score(y_test, X_test_selected_pred)
 f1score_perc = f1_score(y_test, X_test_selected_pred)
 precision_perc = precision_score(y_test, X_test_selected_pred)
 recall_perc = recall_score(y_test, X_test_selected_pred)
 
-print()
-print('Majority Voting Model')
+print('\nMajority Voting Model')
 print('-'*20)
 print('Accuracy: {:.3f}'.format(acc_perc))
 print('Precision: {:.3f}'.format(precision_perc))
