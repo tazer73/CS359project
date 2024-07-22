@@ -2,13 +2,14 @@
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
+from sklearn.base import accuracy_score
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler , PolynomialFeatures
 from sklearn.linear_model import LinearRegression, Ridge
 from sklearn.feature_selection import SelectFromModel, SequentialFeatureSelector, RFE
 from sklearn.feature_selection import r_regression, f_regression, mutual_info_regression
 from sklearn.ensemble import RandomForestRegressor
-from sklearn.metrics import r2_score, mean_squared_error
+from sklearn.metrics import f1_score, precision_score, r2_score, mean_squared_error, recall_score
 from sklearn.feature_selection import SelectKBest, SelectPercentile
 from xgboost import XGBRegressor , XGBClassifier
 
@@ -133,3 +134,8 @@ plt.ylabel("y_test")
 plt.legend()
 plt.savefig(fname='LinearTest.png', format='png', dpi=600)
 plt.show()
+
+acc_adaboost_perc = accuracy_score(y_test, X_test_selected_pred)
+f1score_adaboost_perc = f1_score(y_test, X_test_selected_pred)
+precision_adaboost_perc = precision_score(y_test, X_test_selected_pred)
+recall_adaboost_perc = recall_score(y_test, X_test_selected_pred)
