@@ -5,10 +5,10 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler , PolynomialFeatures
-from sklearn.linear_model import LinearRegression, Perceptron, Ridge
+from sklearn.linear_model import LinearRegression, LogisticRegression, Perceptron, Ridge
 from sklearn.feature_selection import SelectFromModel, SequentialFeatureSelector, RFE
 from sklearn.feature_selection import r_regression, f_regression, mutual_info_regression
-from sklearn.ensemble import AdaBoostClassifier, RandomForestRegressor
+from sklearn.ensemble import AdaBoostClassifier, RandomForestRegressor, VotingClassifier
 from sklearn.metrics import ConfusionMatrixDisplay, f1_score, precision_score, recall_score, accuracy_score
 from sklearn.feature_selection import SelectKBest, SelectPercentile
 from xgboost import XGBRegressor , XGBClassifier
@@ -123,6 +123,7 @@ f1score_perc = f1_score(y_test, X_test_selected_pred)
 precision_perc = precision_score(y_test, X_test_selected_pred)
 recall_perc = recall_score(y_test, X_test_selected_pred)
 
+print()
 print('XGBC Model')
 print('-'*20)
 print('Accuracy: {:.3f}'.format(acc_perc))
@@ -143,6 +144,7 @@ f1score_perc = f1_score(y_test, X_test_selected_pred)
 precision_perc = precision_score(y_test, X_test_selected_pred)
 recall_perc = recall_score(y_test, X_test_selected_pred)
 
+print()
 print('Perceptron Model')
 print('-'*20)
 print('Accuracy: {:.3f}'.format(acc_perc))
@@ -162,7 +164,48 @@ f1score_perc = f1_score(y_test, X_test_selected_pred)
 precision_perc = precision_score(y_test, X_test_selected_pred)
 recall_perc = recall_score(y_test, X_test_selected_pred)
 
+print()
 print('AdaBoost Model')
+print('-'*20)
+print('Accuracy: {:.3f}'.format(acc_perc))
+print('Precision: {:.3f}'.format(precision_perc))
+print('Recall: {:.3f}'.format(recall_perc))
+print('F1-score: {:.3f}'.format(f1score_perc))
+
+
+#LOGISTIC REGRESSION MODEL
+lr = LogisticRegression().fit(X_train_selected, y_train)
+lr.fit(X_train_selected,y_train)
+X_train_selected_pred = lr.predict(X_train_selected)
+X_test_selected_pred = lr.predict(X_test_selected)
+acc_perc = accuracy_score(y_test, X_test_selected_pred)
+f1score_perc = f1_score(y_test, X_test_selected_pred)
+precision_perc = precision_score(y_test, X_test_selected_pred)
+recall_perc = recall_score(y_test, X_test_selected_pred)
+
+print()
+print('Logistic Regression Model')
+print('-'*20)
+print('Accuracy: {:.3f}'.format(acc_perc))
+print('Precision: {:.3f}'.format(precision_perc))
+print('Recall: {:.3f}'.format(recall_perc))
+print('F1-score: {:.3f}'.format(f1score_perc))
+
+#MAJORITYVOTING MODEL
+hard_majorityvote = VotingClassifier(estimators=[('perceptron', perceptron),
+                                                 ('adaboost_perc', adaboost_perc),
+                                                 ('logistic regression', lr)],
+                                     voting='hard')
+hard_majorityvote.fit(X_train_selected,y_train)
+X_train_selected_pred = hard_majorityvote.predict(X_train_selected)
+X_test_selected_pred = hard_majorityvote.predict(X_test_selected)
+acc_perc = accuracy_score(y_test, X_test_selected_pred)
+f1score_perc = f1_score(y_test, X_test_selected_pred)
+precision_perc = precision_score(y_test, X_test_selected_pred)
+recall_perc = recall_score(y_test, X_test_selected_pred)
+
+print()
+print('Majority Voting Model')
 print('-'*20)
 print('Accuracy: {:.3f}'.format(acc_perc))
 print('Precision: {:.3f}'.format(precision_perc))
